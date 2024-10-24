@@ -1,7 +1,5 @@
-import SearchResults from '@/components/SearchResults'
+import SearchPage from '@/components/SearchPage'
 
-export default function SearchResultsPage({ searchParams }: { searchParams: { q?: string } }) {
-  const searchTerm = searchParams.q || ""
-
-  return <SearchResults initialSearchTerm={searchTerm} />
+export default function Search() {
+  return <SearchPage />
 }

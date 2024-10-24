@@ -1,19 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
-export default function SearchForm({ initialSearchTerm = "" }) {
+interface SearchFormProps {
+  initialSearchTerm?: string;
+  onSearch: (searchTerm: string) => void;
+  buttonText?: string;
+}
+
+export default function SearchForm({ 
+  initialSearchTerm = "", 
+  onSearch,
+  buttonText = "Search"
+}: SearchFormProps) {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm)
-  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const query = searchParams?.get('q')
+    if (query) {
+      setSearchTerm(query)
+    }
+  }, [searchParams])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("Searching for:", searchTerm)
-    router.push(`/search?q=${encodeURIComponent(searchTerm)}`)
+    if (searchTerm.trim()) {
+      onSearch(searchTerm.trim())
+    }
   }
 
   return (
@@ -25,7 +43,7 @@ export default function SearchForm({ initialSearchTerm = "" }) {
           type="text"
           required
           className="pr-10"
-          placeholder="Person, Company Name, CR12"
+          placeholder="Enter company name, CR12 number, or director name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -38,7 +56,7 @@ export default function SearchForm({ initialSearchTerm = "" }) {
           type="submit"
           className="w-full bg-gray-900 hover:bg-gray-800 text-white"
         >
-          Start Search
+          {buttonText}
         </Button>
       </div>
     </form>

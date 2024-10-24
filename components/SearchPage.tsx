@@ -1,21 +1,17 @@
 "use client"
 
-import { ArrowUpRight, Search } from "lucide-react"
-import { useState } from "react"
+import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import SearchForm from "@/components/SearchForm"
+import { useSearchParams, useRouter } from 'next/navigation'
 
 export default function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const searchParams = useSearchParams()
   const router = useRouter()
+  const initialQuery = searchParams?.get('q') || ""
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (searchTerm.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchTerm)}`)
-    }
+  const handleSearch = (searchTerm: string) => {
+    router.push(`/search/results?q=${encodeURIComponent(searchTerm)}`)
   }
 
   return (
@@ -48,31 +44,7 @@ export default function SearchPage() {
               Search for companies, directors, or business information
             </p>
           </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="relative">
-              <Input
-                id="search-term"
-                name="search"
-                type="text"
-                required
-                className="pr-10"
-                placeholder="Person, Company Name, CR12"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
-              </div>
-            </div>
-            <div>
-              <Button
-                type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white"
-              >
-                Start Search
-              </Button>
-            </div>
-          </form>
+          <SearchForm initialSearchTerm={initialQuery} onSearch={handleSearch} buttonText="Search" />
         </div>
       </main>
 

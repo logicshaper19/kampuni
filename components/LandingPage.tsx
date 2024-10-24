@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
   const router = useRouter()
 
   const features = [
@@ -18,8 +19,18 @@ export default function LandingPage() {
     { name: 'Advanced Search', description: 'Quickly find and sort business information with powerful tools.', icon: Filter },
   ]
 
-  const handleGetStarted = () => {
-    router.push('/search?q=Elisha%20Sore')
+  const handleGetStarted = async () => {
+    if (isNavigating) return // Prevent double clicks
+    
+    try {
+      setIsNavigating(true)
+      console.log("Navigating to search page...")
+      await router.push('/search')
+    } catch (error) {
+      console.error("Navigation error:", error)
+    } finally {
+      setIsNavigating(false)
+    }
   }
 
   return (
@@ -36,7 +47,14 @@ export default function LandingPage() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {['Features', 'Data Sources', 'Insights', 'Login'].map((item) => (
-                  <Link key={item} href="#" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition duration-150 ease-in-out">
+                  <Link 
+                    key={item} 
+                    href="#" 
+                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 
+                             hover:text-gray-900 hover:bg-gray-100 
+                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                             transition duration-150 ease-in-out"
+                  >
                     {item}
                   </Link>
                 ))}
@@ -44,8 +62,12 @@ export default function LandingPage() {
             </div>
             <div className="md:hidden">
               <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 
+                         hover:text-gray-900 hover:bg-gray-100 
+                         focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+                aria-expanded={isMenuOpen}
               >
                 <span className="sr-only">Open main menu</span>
                 {isMenuOpen ? (
@@ -61,7 +83,14 @@ export default function LandingPage() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {['Features', 'Data Sources', 'Insights', 'Login'].map((item) => (
-                <Link key={item} href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition duration-150 ease-in-out">
+                <Link 
+                  key={item} 
+                  href="#" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 
+                           hover:text-gray-900 hover:bg-gray-100 
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                           transition duration-150 ease-in-out"
+                >
                   {item}
                 </Link>
               ))}
@@ -84,14 +113,25 @@ export default function LandingPage() {
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
                   <button
-                    onClick={handleGetStarted}
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out"
+                    type="button"
+                    onClick={() => {
+                      console.log("Get Started button clicked");
+                      router.push('/search');
+                    }}
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out relative z-20"
                   >
                     Get started
                   </button>
                 </div>
                 <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                  <Link href="#" className="w-full flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out">
+                  <Link 
+                    href="#" 
+                    className="w-full flex items-center justify-center px-8 py-3 
+                             border border-gray-300 text-base font-medium rounded-md 
+                             text-gray-900 bg-white hover:bg-gray-50 
+                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                             md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out"
+                  >
                     Learn more
                   </Link>
                 </div>
@@ -146,7 +186,7 @@ export default function LandingPage() {
             </Link>
           </div>
           <div className="mt-8 md:mt-0 md:order-1">
-            <p className="text-center text-base text-gray-600">&copy; 2023 Kampuni. All rights reserved.</p>
+            <p className="text-center text-base text-gray-600">&copy; 2024 Kampuni. All rights reserved.</p>
           </div>
         </div>
       </footer>

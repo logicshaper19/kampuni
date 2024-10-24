@@ -21,6 +21,8 @@ interface Company {
 }
 
 function CompanyCard({ company }: { company: Company }) {
+  const router = useRouter()
+
   const getHealthIcon = (health: 'good' | 'warning' | 'bad') => {
     switch (health) {
       case 'good':
@@ -32,6 +34,11 @@ function CompanyCard({ company }: { company: Company }) {
     }
   }
 
+  const handleCompanyClick = () => {
+    const companyId = company.name.toLowerCase().replace(/\s+/g, '-')
+    router.push(`/company/${companyId}`)
+  }
+
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -39,7 +46,7 @@ function CompanyCard({ company }: { company: Company }) {
           <span>{company.name}</span>
           {getHealthIcon(company.health)}
         </CardTitle>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" onClick={handleCompanyClick}>
           <ArrowUpRight className="h-5 w-5" />
         </Button>
       </CardHeader>

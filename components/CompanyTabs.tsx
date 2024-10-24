@@ -3,14 +3,32 @@
 import { useState } from 'react';
 import { FileText, Calendar, History, Users, Building2, LinkIcon } from 'lucide-react';
 
-export default function CompanyTabs({ company }) {
+interface Company {
+  id: string;
+  name: string;
+  number: string;
+  industry: string;
+  directors: string[];
+  shareholders: { name: string; percentage: number }[];
+  financials: {
+    year: number;
+    revenue: number;
+    profit: number;
+  }[];
+  changes: {
+    date: string;
+    change: string;
+  }[];
+}
+
+export default function CompanyTabs({ company }: { company: Company }) {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
     <div>
       <div className="mb-8">
         <nav className="flex space-x-4 border-b border-gray-200">
-          {['Overview', 'Financials', 'Changes', 'Related Entities', 'Observations'].map((tab) => (
+          {['Overview', 'Directors', 'Shareholders', 'Financials', 'Changes', 'Related Entities', 'Observations'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab.toLowerCase())}
@@ -173,6 +191,37 @@ export default function CompanyTabs({ company }) {
                 <p className="text-gray-600">Elisha Liyai Sore is a central figure who connects Priority Mobile to Priority Health, suggesting a network of companies under similar ownership or interests.</p>
               </div>
             </li>
+          </ul>
+        </div>
+      )}
+
+      {activeTab === 'directors' && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Directors</h2>
+          <ul className="space-y-2">
+            {company.directors.map((director, index) => (
+              <li key={index} className="flex items-center">
+                <Users className="h-5 w-5 text-gray-500 mr-3" />
+                <span>{director}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {activeTab === 'shareholders' && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Shareholders</h2>
+          <ul className="space-y-2">
+            {company.shareholders.map((shareholder, index) => (
+              <li key={index} className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Users className="h-5 w-5 text-gray-500 mr-3" />
+                  <span>{shareholder.name}</span>
+                </div>
+                <span>{shareholder.percentage}%</span>
+              </li>
+            ))}
           </ul>
         </div>
       )}

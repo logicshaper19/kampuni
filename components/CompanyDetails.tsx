@@ -15,9 +15,9 @@ export default function CompanyDetails({ company }: { company: Company }) {
   const [activeTab, setActiveTab] = useState('overview')
 
   const financialData = [
-    { year: 2022, revenue: 1500000, profit: 300000 },
-    { year: 2021, revenue: 1200000, profit: 240000 },
-    { year: 2020, revenue: 1000000, profit: 180000 },
+    { year: 2023, revenue: 1500000, profit: 300000 },
+    { year: 2022, revenue: 1200000, profit: 240000 },
+    { year: 2021, revenue: 1000000, profit: 180000 },
   ]
 
   const companyChanges = [
@@ -110,7 +110,7 @@ export default function CompanyDetails({ company }: { company: Company }) {
 
       <footer className="bg-gray-100 mt-12">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-base text-gray-600">&copy; 2023 Kampuni. All rights reserved.</p>
+          <p className="text-center text-base text-gray-600">&copy; 2024 Kampuni. All rights reserved.</p>
         </div>
       </footer>
     </div>
